@@ -137,12 +137,10 @@ print(
     'Attribute Information: (Average = 0, Negative = 1, Positive = 2, B-Bankruptcy, NB-Non-Bankruptcy)'
 )
 
-sample.append(int(input("Industrial Risk: ")))
-sample.append(int(input("Management Risk: ")))
-sample.append(int(input("Financial Flexibility: ")))
-sample.append(int(input("Credibility: ")))
-sample.append(int(input("Competitiveness: ")))
-sample.append(int(input("Operating Risk: ")))
+questions = ["Industrial Risk", "Management Risk", "Financial Flexibility", "Credibility", "Competitiveness", "Operating Risk"]
+
+for i in range(6):
+  sample.append(int(input(questions[i] + ": ")))
 
 if clf.predict(predict_this) == 1:
     print("Non-Bankruptcy")
