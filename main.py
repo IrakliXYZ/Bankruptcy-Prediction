@@ -140,8 +140,13 @@ print(
 questions = ["Industrial Risk", "Management Risk", "Financial Flexibility", "Credibility", "Competitiveness", "Operating Risk"]
 
 for i in range(6):
-  sample.append(int(input(questions[i] + ": ")))
-
+  value = int(input(questions[i] + ": "))
+  if value == 0 or value == 1 or value == 2:
+    sample.append(value)
+  else:
+    raise ValueError("Value not allowed. Try 0, 1, 2.")
+    
+  
 if clf.predict(predict_this) == 1:
     print("Non-Bankruptcy")
 if clf.predict(predict_this) == 0:
