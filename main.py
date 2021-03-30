@@ -46,7 +46,7 @@ plt.ylabel("Number of records")
 # The `stratify` parameter is used to proportionally split according to distribution of target class.
 # Documentaion: https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html
 X_train, X_test, Y_train, Y_test = train_test_split(
-    X, Y, test_size=0.3, stratify=Y, shuffle=True
+    X, Y, test_size = 0.3, stratify = Y, shuffle = True
 )
 
 # Scaling the data for better accuracy and less inexpectancies
@@ -55,20 +55,28 @@ scaler.fit(X_train)
 X_train = scaler.transform(X_train)
 X_test = scaler.transform(X_test)
 
-# Making of SVM (Support-Vector Machine)
-# This SVC class allows us to build a kernel SVM model (linear as well as non-linear), The default value of the kernel is ‘rbf’. Why ‘rbf’, because it is nonlinear and gives better results as compared to linear.
-classifier = SVC(kernel="rbf", random_state=0)
-classifier.fit(X_train, Y_train)
+# Making of SVM (Support-Vector Machine) model
+# This SVC class allows us to build a kernel SVM model (linear as well as non-linear), The default value of the kernel is ‘rbf’. ‘rbf’ is nonlinear.
+rbf_svm_classifier = SVC(kernel="rbf", random_state=0)
+rbf_svm_classifier.fit(X_train, Y_train)
 
 # Predict the Test Set Results
-Y_pred = classifier.predict(X_test)
+rbf_svm_Y_pred = rbf_svm_classifier.predict(X_test)
 
-# Model Accuracy for SVM
-# Confusion Matrices
-# To build the confusion matrix we need to get the predictions of the trained model on the testing dataset i.e. `X_test`
-cm = confusion_matrix(Y_test, Y_pred)
-accuracy_score(Y_test, Y_pred)
-print("Non-linear SVM error rate =", 1 - accuracy_score(Y_test, Y_pred))
+# Model Accuracy for non-linear SVM
+print("Non-linear SVM error rate =", 1 - accuracy_score(Y_test, rbf_svm_Y_pred))
+
+
+
+# Linear SVM
+linear_svm_classifier = SVC(kernel = 'linear', random_state = 0)
+linear_svm_classifier.fit(X_train, Y_train)
+
+# Predict the Test Set Results
+linear_svm_Y_pred = linear_svm_classifier.predict(X_test)
+
+# Model Accuracy for linear SVM
+print("Linear SVM error rate =", 1 - accuracy_score(Y_test, linear_svm_Y_pred))
 
 
 # Decision Tree
@@ -82,14 +90,14 @@ clf.fit(X_train, Y_train)
 # Model Accuracy
 # Confusion Matrices
 # To build the confusion matrix we need to get the predictions of the trained model on the testing dataset i.e. `X_test`
-Y_predictions = clf.predict(X_test)
-Y_predictions2 = clf.predict(X_train)
+tree_Y_pred = clf.predict(X_test)
+tree_Y_pred2 = clf.predict(X_train)
 
 # The confusion matrix for our model is built using `confusion_matrix` from `sklearn.metrics`.
-cm = confusion_matrix(Y_predictions, Y_test)
-cm2 = confusion_matrix(Y_predictions2, Y_train)
+tree_cm = confusion_matrix(tree_Y_pred, Y_test)
+tree_cm2 = confusion_matrix(tree_Y_pred2, Y_train)
 
-# To get the accuracy we need to get the sum of (true positives   true negatives) / total
+# To get the accuracy we need to get the sum of (true positives true negatives) / total
 # This metric gives overall how often the classifer is correct.
 def accuracy(confusion_matrix):
     diagonal_sum = confusion_matrix.trace()
@@ -97,11 +105,11 @@ def accuracy(confusion_matrix):
     return diagonal_sum / sum_of_all_elements
 
 # Decision tree test set error rate
-test_accuracy = accuracy(cm)
-print("Decision tree test set error rate =", 1 - test_accuracy)
+tree_test_accuracy = accuracy(tree_cm)
+print("Decision tree test set error rate =", 1 - tree_test_accuracy)
 
 # Decision tree Training set error rate
-training_accuracy = accuracy(cm2)
+training_accuracy = accuracy(tree_cm2)
 print("Decision tree training set error rate =", 1 - training_accuracy)
 
 # Tree Visualization
@@ -110,17 +118,17 @@ print("Decision tree training set error rate =", 1 - training_accuracy)
 plt.figure(figsize=(15, 10))
 tree.plot_tree(
     clf,
-    filled=True,
-    fontsize=10,
-    max_depth=None,
-    feature_names=list(X.columns),
-    class_names=True,
+    filled = True,
+    fontsize = 10,
+    max_depth = None,
+    feature_names = list(X.columns),
+    class_names = True,
 )
 # plt.show() 
 
 
 # Building shorter trees - 3 nodes
-clf_3 = tree.DecisionTreeClassifier(criterion="gini", max_leaf_nodes=3)
+clf_3 = tree.DecisionTreeClassifier(criterion = "gini", max_leaf_nodes=3)
 clf_3.fit(X_train, Y_train)
 
 # Confusion Matrices for 3 node tree
@@ -143,21 +151,20 @@ print("3 node tree training set error rate =", 1 - training_accuracy_3)
 plt.figure(figsize=(12, 10))
 tree.plot_tree(
     clf_3,
-    filled=True,
-    fontsize=10,
-    max_depth=None,
-    feature_names=list(X.columns),
-    class_names=True,
+    filled = True,
+    fontsize = 10,
+    max_depth = None,
+    feature_names = list(X.columns),
+    class_names = True,
 )
 # plt.show()
 
 
-
 # Gaussian Naive Bayes
-NBclassifier = GaussianNB()
-NBclassifier.fit(X_train, Y_train)
-y_pred_Gaussian = classifier.predict(X_test)
-cm_Gaussian = confusion_matrix(y_pred_Gaussian, Y_test)
+gaussian_classifier = GaussianNB()
+gaussian_classifier.fit(X_train, Y_train)
+y_pred_gaussian = gaussian_classifier.predict(X_test)
+cm_Gaussian = confusion_matrix(y_pred_gaussian, Y_test)
 print("Gaussian error rate =", 1 - accuracy(cm_Gaussian))
 
 
@@ -169,7 +176,7 @@ sample = []
 
 predict_this.append(sample)
 
-print("Custom data input\nAttribute Information: (Average = 0, Negative = 1, Positive = 2, B-Bankruptcy, NB-Non-Bankruptcy)")
+print("Custom data input\nAttribute Information: (Average = 0, Negative = 1, Positive = 2, B = Bankruptcy, NB = Non-Bankruptcy)")
 
 questions = ["Industrial Risk", "Management Risk", "Financial Flexibility", "Credibility", "Competitiveness", "Operating Risk"]
 
@@ -180,8 +187,11 @@ for i in range(6):
   else:
     raise ValueError("Value not allowed. Try 0 for Average, 1 for Negative, or 2 for Positive.")
     
-  
+
 if clf.predict(predict_this) == 1:
     print("Non-Bankruptcy")
 else:
     print("Bankruptcy")
+
+
+# Todo: choose which model to use for custom prediction
