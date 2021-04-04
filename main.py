@@ -9,7 +9,7 @@ from sklearn import preprocessing as sk_preprocessing
 from sklearn.naive_bayes import GaussianNB
 
 # Reading the file and saving the information in a dataframe
-data = pd.read_csv("Dataset/Qualitative_Bankruptcy.data.txt", sep=",", header=None)
+data = pd.read_csv("Dataset/Qualitative_Bankruptcy.data.txt", sep = ",", header = None)
 data.columns = [
     "Industrial Risk",
     "Management Risk",
@@ -34,10 +34,10 @@ data_numbers.head()
 # Choosing the Target Attribute
 # Conventionally the class or target attribute is labeled as Y and the rest of the dataset is X
 Y = data_numbers["Class"]
-X = data_numbers.drop("Class", axis=1)
+X = data_numbers.drop("Class", axis = 1)
 
 # Splitting the data
-plt.hist(data_numbers["Class"], bins=2, color="orange", edgecolor="black")
+plt.hist(data_numbers["Class"], bins = 2, color = "orange", edgecolor = "black")
 plt.xlabel("Class")
 plt.ylabel("Number of records")
 
@@ -57,7 +57,7 @@ X_test = scaler.transform(X_test)
 
 # Making of SVM (Support-Vector Machine) model
 # This SVC class allows us to build a kernel SVM model (linear as well as non-linear), The default value of the kernel is ‘rbf’. ‘rbf’ is nonlinear.
-rbf_svm_classifier = SVC(kernel="rbf", random_state=0)
+rbf_svm_classifier = SVC(kernel = "rbf", random_state = 0)
 rbf_svm_classifier.fit(X_train, Y_train)
 
 # Predict the Test Set Results
@@ -81,7 +81,7 @@ print("Linear SVM error rate =", 1 - accuracy_score(Y_test, linear_svm_Y_pred))
 
 # Decision Tree
 # The Classifer is built using the `DecisionTreeClassifier()` method from `sklearn.tree`. The parameter `criterion` is used to specify the type of decision tree.
-clf = tree.DecisionTreeClassifier(criterion="gini", max_leaf_nodes=None)
+clf = tree.DecisionTreeClassifier(criterion = "gini", max_leaf_nodes = None)
 
 # Training the classifer
 # We will train the classifier on the traing data i.e. `X_train`, `Y_train`.
@@ -124,14 +124,13 @@ tree.plot_tree(
     feature_names = list(X.columns),
     class_names = True,
 )
-# plt.show() 
+plt.show() 
 
 
 # Building shorter trees - 3 nodes
 clf_3 = tree.DecisionTreeClassifier(criterion = "gini", max_leaf_nodes=3)
 clf_3.fit(X_train, Y_train)
 
-# Confusion Matrices for 3 node tree
 Y_3_predictions = clf_3.predict(X_test)
 Y_3_predictions2 = clf_3.predict(X_train)
 
@@ -149,15 +148,8 @@ print("3 node tree training set error rate =", 1 - training_accuracy_3)
 
 # Plotting 3 node tree
 plt.figure(figsize=(12, 10))
-tree.plot_tree(
-    clf_3,
-    filled = True,
-    fontsize = 10,
-    max_depth = None,
-    feature_names = list(X.columns),
-    class_names = True,
-)
-# plt.show()
+tree.plot_tree(clf_3, filled = True, fontsize = 10, max_depth = None, feature_names = list(X.columns), class_names = True)
+plt.show()
 
 
 # Gaussian Naive Bayes
@@ -194,4 +186,4 @@ else:
     print("Bankruptcy")
 
 
-# Todo: choose which model to use for custom prediction
+# Todo: let user choose which model to use for custom prediction
